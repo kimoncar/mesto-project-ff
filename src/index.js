@@ -42,6 +42,7 @@ function profileFormSubmit(evt) {
   evt.preventDefault();
   profileName.textContent = inputProfileName.value;
   profileDescription.textContent = inputProfileDescription.value;
+  closeModal(modalProfileEdit);
 };
 
 // Функция добавления карточки
@@ -50,6 +51,7 @@ function addCardFormSubmit(evt) {
   const newCard = createCard({name: inputCardName.value, link: inputCardUrl.value}, removeCard, openModalImg, addLike);
   placesList.prepend(newCard);
   formAddCard.reset();
+  closeModal(modalAddCard);
 }
 
 // Функция открытия карточки изображения
@@ -77,9 +79,13 @@ buttonNewCard.addEventListener('click', evt =>  {
   openModal(modalAddCard);
 });
 
-// Обработчик закрытия на все модальные окна
+// Обработчик закрытия на все модальные окна по overlay и х
 openModals.forEach(modal => {
-  closeModal(modal);
+  modal.addEventListener('click', evt => {
+    if(evt.target.classList.contains('popup_is-opened') || evt.target.classList.contains('popup__close')) {
+      closeModal(modal);
+    };
+  });
 });
 
 // Редактирование профиля

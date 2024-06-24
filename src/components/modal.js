@@ -6,22 +6,16 @@ function openModal(modal) {
   document.addEventListener('keydown', closeModalEscape);
 };
 
-// Функция закрытия модального окна мышкой
+// Функция закрытия модального окна
 function closeModal(modal) {
-  modal.addEventListener('click', evt => {
-    if(evt.target.classList.contains('popup_is-opened') || evt.target.classList.contains('popup__close') || evt.target.classList.contains('popup__button')) {
-      modal.classList.remove('popup_is-opened');
-      document.removeEventListener('keydown', closeModalEscape);
-    };
-  });
-};
+  modal.classList.remove('popup_is-opened');
+  document.removeEventListener('keydown', closeModalEscape);
+}
 
 // Функция закрытия модального окна клавишей Escape
 function closeModalEscape(evt) {
   if(evt.key === 'Escape') {
     const modal = document.querySelector('.popup_is-opened');
-    modal.classList.remove('popup_is-opened');
-    document.removeEventListener('keydown', closeModalEscape);
+    closeModal(modal);
   };
 };
-
