@@ -1,5 +1,5 @@
 import './pages/index.css';
-import { openModal, closeModalMouse } from './components/modal.js';
+import { openModal, closeModal } from './components/modal.js';
 import { initialCards } from './components/cards.js';
 import { createCard, removeCard, addLike } from  './components/card.js';
 export { cardTemplate};
@@ -77,9 +77,9 @@ buttonNewCard.addEventListener('click', evt =>  {
   openModal(modalAddCard);
 });
 
-// Обработчик закрытия мышкой на все модальные окна
+// Обработчик закрытия на все модальные окна
 openModals.forEach(modal => {
-  closeModalMouse(modal);
+  closeModal(modal);
 });
 
 // Редактирование профиля
