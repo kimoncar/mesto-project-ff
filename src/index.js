@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { openModal, closeModal } from './components/modal.js';
 import { initialCards } from './components/cards.js';
-import { createCard, removeCard, addLike } from  './components/card.js';
+import { createCard, removeCard, toggleLike } from  './components/card.js';
 export { cardTemplate};
 
 // DOM: Темплейт карточки
@@ -48,7 +48,7 @@ function profileFormSubmit(evt) {
 // Функция добавления карточки
 function addCardFormSubmit(evt) {
   evt.preventDefault();
-  const newCard = createCard({name: inputCardName.value, link: inputCardUrl.value}, removeCard, openModalImg, addLike);
+  const newCard = createCard({name: inputCardName.value, link: inputCardUrl.value}, removeCard, openModalImg, toggleLike);
   placesList.prepend(newCard);
   formAddCard.reset();
   closeModal(modalAddCard);
@@ -64,7 +64,7 @@ function openModalImg(dataCard) {
 
 // Вывод карточек на страницу
 initialCards.forEach(function(itemCard) {
-  placesList.append(createCard(itemCard, removeCard, openModalImg, addLike));
+  placesList.append(createCard(itemCard, removeCard, openModalImg, toggleLike));
 });
 
 // Открыть окно редактирования профиля

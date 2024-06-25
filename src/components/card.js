@@ -1,4 +1,4 @@
-export { createCard, removeCard, addLike };
+export { createCard, removeCard, toggleLike };
 import { cardTemplate } from '../index.js';
 
 // Функция создания карточки
@@ -12,8 +12,8 @@ function createCard(itemCard, removeCallback, openModalImg, addLike) {
   cardImage.src = itemCard.link;
   cardImage.alt = `Фотография места из региона: ${itemCard.name}`;
   cardTitle.textContent = itemCard.name;
+  likeButton.addEventListener('click', toggleLike);
   removeButton.addEventListener('click', removeCallback);
-  likeButton.addEventListener('click', addLike);
   cardImage.addEventListener('click', () => {
     openModalImg(itemCard);
   });
@@ -23,10 +23,11 @@ function createCard(itemCard, removeCallback, openModalImg, addLike) {
 
 // Удаление карточки
 function removeCard(evt) {
-  evt.target.parentElement.remove();
+  evt.target.closest('.card').remove();
+  //evt.target.parentElement.remove();
 };
 
 // Лайк
-function addLike(evt) {
+function toggleLike(evt) {
   evt.target.classList.toggle('card__like-button_is-active');
 }
