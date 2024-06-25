@@ -24,7 +24,6 @@ function createCard(itemCard, removeCallback, openModalImg, addLike) {
 // Удаление карточки
 function removeCard(evt) {
   evt.target.closest('.card').remove();
-  //evt.target.parentElement.remove();
 };
 
 // Лайк
