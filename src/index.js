@@ -1,5 +1,5 @@
 import './pages/index.css';
-import { openModal, closeModal } from './components/modal.js';
+import { openModal, closeModal, closeModalByClick } from './components/modal.js';
 import { initialCards } from './components/cards.js';
 import { createCard, removeCard, toggleLike } from  './components/card.js';
 export { cardTemplate};
@@ -81,11 +81,7 @@ buttonNewCard.addEventListener('click', evt =>  {
 
 // Обработчик закрытия на все модальные окна по overlay и х
 openModals.forEach(modal => {
-  modal.addEventListener('click', evt => {
-    if(evt.target.classList.contains('popup_is-opened') || evt.target.classList.contains('popup__close')) {
-      closeModal(modal);
-    };
-  });
+  closeModalByClick(modal);
 });
 
 // Редактирование профиля
