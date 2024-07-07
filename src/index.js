@@ -33,10 +33,11 @@ const formProfileEdit = modalProfileEdit.querySelector('.popup__form');
 const inputProfileName = formProfileEdit.querySelector('.popup__input_type_name');
 const inputProfileDescription = formProfileEdit.querySelector('.popup__input_type_description');
 
-// DOM: Форма добаления карточки
+// DOM: Форма добавления карточки
 const formAddCard = modalAddCard.querySelector('.popup__form');
 const inputCardName = formAddCard.querySelector('.popup__input_type_card-name');
 const inputCardUrl = formAddCard.querySelector('.popup__input_type_url');
+const buttonAddCard = formAddCard.querySelector('.popup__button');
 
 // Объект с настройками валидации форм
 const validationConfig = {
@@ -62,6 +63,7 @@ function addCardFormSubmit(evt) {
   const newCard = createCard({name: inputCardName.value, link: inputCardUrl.value}, removeCard, openModalImg, toggleLike);
   placesList.prepend(newCard);
   formAddCard.reset();
+  buttonAddCard.classList.add(validationConfig.inactiveButtonClass);
   closeModal(modalAddCard);
 }
 

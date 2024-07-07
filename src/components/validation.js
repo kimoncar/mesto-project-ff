@@ -63,13 +63,11 @@ export const enableValidation = (validationConfig) => {
 
 export const clearValidation = (formElement, validationConfig) => {
   let inputList = Array.from(formElement.querySelectorAll(`.${validationConfig.inputErrorClass}`));
-  if(inputList.length) {
-    inputList.forEach((inputElement) => {
-      const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-      inputElement.classList.remove(validationConfig.inputErrorClass);
-      errorElement.classList.remove(validationConfig.errorClass);
-      errorElement.textContent = '';
-    });
-    formElement.reset();
-  };
+  inputList.forEach((inputElement) => {
+    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+    inputElement.classList.remove(validationConfig.inputErrorClass);
+    inputElement.value = '';
+    errorElement.classList.remove(validationConfig.errorClass);
+    errorElement.textContent = '';
+  });
 };
