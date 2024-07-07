@@ -2,8 +2,8 @@ import './pages/index.css';
 import { openModal, closeModal, closeModalByClick } from './components/modal.js';
 import { initialCards } from './components/cards.js';
 import { createCard, removeCard, toggleLike } from  './components/card.js';
-import { enableValidation} from './components/validation.js';
-export { cardTemplate};
+import { enableValidation, clearValidation } from './components/validation.js';
+export { cardTemplate };
 
 // DOM: Темплейт карточки
 const cardTemplate = document.querySelector('#card-template').content;
@@ -80,6 +80,7 @@ initialCards.forEach(function(itemCard) {
 
 // Открыть окно редактирования профиля
 buttonProfileModal.addEventListener('click', evt => {
+  clearValidation(formProfileEdit, validationConfig);
   inputProfileName.value = profileName.textContent;
   inputProfileDescription.value = profileDescription.textContent;
   openModal(modalProfileEdit);
@@ -87,6 +88,7 @@ buttonProfileModal.addEventListener('click', evt => {
 
 // Открыть окно добавления карточки
 buttonNewCard.addEventListener('click', evt =>  {
+  clearValidation(formAddCard, validationConfig);
   openModal(modalAddCard);
 });
 
