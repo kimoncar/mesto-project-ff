@@ -38,6 +38,16 @@ const formAddCard = modalAddCard.querySelector('.popup__form');
 const inputCardName = formAddCard.querySelector('.popup__input_type_card-name');
 const inputCardUrl = formAddCard.querySelector('.popup__input_type_url');
 
+// Объект с настройками валидации форм
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
 // Функция редактирования профиля
 function profileFormSubmit(evt) {
   evt.preventDefault();
@@ -91,16 +101,5 @@ formProfileEdit.addEventListener('submit', profileFormSubmit);
 // Добавление карточки
 formAddCard.addEventListener('submit', addCardFormSubmit);
 
-
-
-// Валидация форм
-const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible'
-};
-
+// Включить валидацию форм
 enableValidation(validationConfig);
