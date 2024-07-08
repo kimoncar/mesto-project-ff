@@ -1,8 +1,9 @@
 import './pages/index.css';
 import { openModal, closeModal, closeModalByClick } from './components/modal.js';
-import { initialCards } from './components/cards.js';
+//import { initialCards } from './components/cards.js';
 import { createCard, removeCard, toggleLike } from  './components/card.js';
 import { enableValidation, clearValidation } from './components/validation.js';
+import { getInitialCards } from './components/api.js';
 export { cardTemplate };
 
 // DOM: Темплейт карточки
@@ -75,11 +76,6 @@ function openModalImg(dataCard) {
   openModal(modalCard);
 };
 
-// Вывод карточек на страницу
-initialCards.forEach(function(itemCard) {
-  placesList.append(createCard(itemCard, removeCard, openModalImg, toggleLike));
-});
-
 // Открыть окно редактирования профиля
 buttonProfileModal.addEventListener('click', evt => {
   clearValidation(formProfileEdit, validationConfig);
@@ -107,3 +103,14 @@ formAddCard.addEventListener('submit', addCardFormSubmit);
 
 // Включить валидацию форм
 enableValidation(validationConfig);
+
+// Загрузка карточек
+getInitialCards()
+  .then((res) => {
+    res.forEach(function(itemCard) {
+      placesList.append(createCard(itemCard, removeCard, openModalImg, toggleLike));
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
