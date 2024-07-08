@@ -3,7 +3,7 @@ import { openModal, closeModal, closeModalByClick } from './components/modal.js'
 //import { initialCards } from './components/cards.js';
 import { createCard, removeCard, toggleLike } from  './components/card.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getInitialCards } from './components/api.js';
+import { getInitialCards, getUserInfo } from './components/api.js';
 export { cardTemplate };
 
 // DOM: Темплейт карточки
@@ -14,6 +14,7 @@ const content = document.querySelector('.content');
 const placesList = content.querySelector('.places__list');
 const profileName = content.querySelector('.profile__title');
 const profileDescription = content.querySelector('.profile__description');
+const profileAvatar = content.querySelector('.profile__image');
 
 // DOM: Кнопки
 const buttonProfileModal = document.querySelector('.profile__edit-button');
@@ -104,12 +105,23 @@ formAddCard.addEventListener('submit', addCardFormSubmit);
 // Включить валидацию форм
 enableValidation(validationConfig);
 
-// Загрузка карточек
+// Получение и вывод карточек
 getInitialCards()
   .then((res) => {
     res.forEach(function(itemCard) {
       placesList.append(createCard(itemCard, removeCard, openModalImg, toggleLike));
     });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+// Получение и вывод информации о пользователе
+getUserInfo()
+  .then((res) => {
+    profileName.textContent = res.name;
+    profileDescription.textContent = res.about;
+    profileAvatar.src = res.avatar;
   })
   .catch((err) => {
     console.log(err);

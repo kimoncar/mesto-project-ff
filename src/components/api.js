@@ -7,6 +7,19 @@ const config = {
   }
 };
 
+// Запрос информации о пользователе
+export const getUserInfo = () => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers
+  })
+  .then(res => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+  });
+};
+
 // Запрос карточек
 export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
@@ -16,6 +29,6 @@ export const getInitialCards = () => {
     if (res.ok) {
       return res.json();
     }
-    return Promise.reject(`Ошибка загрузки карточек: ${res.status}`);
+    return Promise.reject(`Ошибка: ${res.status}`);
   });
 };
