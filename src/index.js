@@ -1,6 +1,5 @@
 import './pages/index.css';
 import { openModal, closeModal, closeModalByClick } from './components/modal.js';
-//import { initialCards } from './components/cards.js';
 import { createCard, removeCard, toggleLike } from  './components/card.js';
 import { enableValidation, clearValidation } from './components/validation.js';
 import { getInitialCards, getUserInfo } from './components/api.js';
@@ -105,24 +104,19 @@ formAddCard.addEventListener('submit', addCardFormSubmit);
 // Включить валидацию форм
 enableValidation(validationConfig);
 
-// Получение и вывод карточек
-getInitialCards()
-  .then((res) => {
-    res.forEach(function(itemCard) {
+// Получение данных с сервера
+Promise.all([getInitialCards(), getUserInfo()])
+  // Получение и вывод карточек
+  .then(([initialCards, userInfo]) => {
+    initialCards.forEach(function(itemCard) {
       placesList.append(createCard(itemCard, removeCard, openModalImg, toggleLike));
     });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
 
-// Получение и вывод информации о пользователе
-getUserInfo()
-  .then((res) => {
-    profileName.textContent = res.name;
-    profileDescription.textContent = res.about;
-    profileAvatar.src = res.avatar;
+    // Получение и вывод информации о пользователе
+    profileName.textContent = userInfo.name;
+    profileDescription.textContent = userInfo.about;
+    profileAvatar.src = userInfo.avatar;
   })
   .catch((err) => {
     console.log(err);
-  });
+  })
