@@ -69,7 +69,8 @@ function addCardFormSubmit(evt) {
   evt.preventDefault();
   addNewCard(inputCardName.value, inputCardUrl.value)
     .then((itemCard) => {
-      const newCard = createCard(itemCard, removeCard, openModalImg, toggleLike);
+      const ownerId = itemCard.owner._id;
+      const newCard = createCard(itemCard, ownerId, removeCard, openModalImg, toggleLike);
       placesList.prepend(newCard);
     })
     .catch((err) => {
@@ -126,8 +127,9 @@ Promise.all([getUserInfo(), getInitialCards()])
     profileAvatar.src = userInfo.avatar;
 
     // Вывод карточек
+    const ownerId = userInfo._id;
     initialCards.forEach(function(itemCard) {
-      placesList.append(createCard(itemCard, removeCard, openModalImg, toggleLike));
+      placesList.append(createCard(itemCard, ownerId, removeCard, openModalImg, toggleLike));
     });
   })
   .catch((err) => {
