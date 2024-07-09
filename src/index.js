@@ -69,7 +69,7 @@ function addCardFormSubmit(evt) {
   evt.preventDefault();
   addNewCard(inputCardName.value, inputCardUrl.value)
     .then((res) => {
-      const newCard = createCard({name: res.name, link: res.link}, removeCard, openModalImg, toggleLike);
+      const newCard = createCard({name: res.name, link: res.link, likes: []}, removeCard, openModalImg, toggleLike);
       placesList.prepend(newCard);
     })
     .catch((err) => {

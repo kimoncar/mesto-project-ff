@@ -8,10 +8,12 @@ function createCard(itemCard, removeCallback, openModalImg, addLike) {
   const cardTitle = placeCard.querySelector('.card__title');
   const removeButton = placeCard.querySelector('.card__delete-button');
   const likeButton = placeCard.querySelector('.card__like-button');
+  const countLikes = placeCard.querySelector('.card__like-count');
 
   cardImage.src = itemCard.link;
   cardImage.alt = `Фотография места из региона: ${itemCard.name}`;
   cardTitle.textContent = itemCard.name;
+  countLikes.textContent = itemCard.likes.length;
   likeButton.addEventListener('click', toggleLike);
   removeButton.addEventListener('click', removeCallback);
   cardImage.addEventListener('click', () => {
