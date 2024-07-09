@@ -1,8 +1,9 @@
 export { createCard, removeCard, toggleLike };
 import { cardTemplate } from '../index.js';
+import { deleteCard } from './api.js';
 
 // Функция создания карточки
-function createCard(itemCard, ownerId, removeCallback, openModalImg, toggleLike) {
+function createCard(itemCard, idOwner, removeCallback, openModalImg, toggleLike) {
   const placeCard = cardTemplate.querySelector('.places__item').cloneNode(true);
   const cardImage = placeCard.querySelector('.card__image');
   const cardTitle = placeCard.querySelector('.card__title');
@@ -10,10 +11,11 @@ function createCard(itemCard, ownerId, removeCallback, openModalImg, toggleLike)
   const likeButton = placeCard.querySelector('.card__like-button');
   const countLikes = placeCard.querySelector('.card__like-count');
 
-  if(itemCard.owner._id !== ownerId) {
+  if(itemCard.owner._id !== idOwner) {
     removeButton.style.display = 'none';
   }
 
+  placeCard.dataset.idCard = itemCard._id;
   cardImage.src = itemCard.link;
   cardImage.alt = `Фотография места из региона: ${itemCard.name}`;
   cardTitle.textContent = itemCard.name;
@@ -29,7 +31,14 @@ function createCard(itemCard, ownerId, removeCallback, openModalImg, toggleLike)
 
 // Удаление карточки
 function removeCard(evt) {
-  evt.target.closest('.card').remove();
+  deleteCard(evt.target.closest('.card').dataset.idCard)
+  .then((res) => {
+    evt.target.closest('.card').remove();
+  })
+  .catch((err) => {
+    console.error(err);
+  })
+  
 };
 
 // Лайк
