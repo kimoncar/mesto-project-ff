@@ -68,8 +68,8 @@ function profileFormSubmit(evt) {
 function addCardFormSubmit(evt) {
   evt.preventDefault();
   addNewCard(inputCardName.value, inputCardUrl.value)
-    .then((res) => {
-      const newCard = createCard({name: res.name, link: res.link, likes: []}, removeCard, openModalImg, toggleLike);
+    .then((itemCard) => {
+      const newCard = createCard(itemCard, removeCard, openModalImg, toggleLike);
       placesList.prepend(newCard);
     })
     .catch((err) => {
