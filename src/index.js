@@ -2,7 +2,7 @@ import './pages/index.css';
 import { openModal, closeModal, closeModalByClick } from './components/modal.js';
 import { createCard, removeCard, toggleLike } from  './components/card.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getInitialCards, getUserInfo } from './components/api.js';
+import { getInitialCards, getUserInfo, editUserInfo, addNewCard } from './components/api.js';
 export { cardTemplate };
 
 // DOM: Темплейт карточки
@@ -50,19 +50,32 @@ const validationConfig = {
   errorClass: 'popup__error_visible'
 };
 
-// Функция редактирования профиля
+// Редактирование профиля
 function profileFormSubmit(evt) {
   evt.preventDefault();
-  profileName.textContent = inputProfileName.value;
-  profileDescription.textContent = inputProfileDescription.value;
+  editUserInfo(inputProfileName.value, inputProfileDescription.value)
+    .then((res) => {
+      profileName.textContent = res.name;
+      profileDescription.textContent = res.about;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   closeModal(modalProfileEdit);
 };
 
-// Функция добавления карточки
+// Добавление карточки
 function addCardFormSubmit(evt) {
   evt.preventDefault();
-  const newCard = createCard({name: inputCardName.value, link: inputCardUrl.value}, removeCard, openModalImg, toggleLike);
-  placesList.prepend(newCard);
+  addNewCard(inputCardName.value, inputCardUrl.value)
+    .then((res) => {
+      const newCard = createCard({name: res.name, link: res.link}, removeCard, openModalImg, toggleLike);
+      placesList.prepend(newCard);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  
   formAddCard.reset();
   buttonAddCard.classList.add(validationConfig.inactiveButtonClass);
   closeModal(modalAddCard);
@@ -105,18 +118,19 @@ formAddCard.addEventListener('submit', addCardFormSubmit);
 enableValidation(validationConfig);
 
 // Получение данных с сервера
-Promise.all([getInitialCards(), getUserInfo()])
-  // Получение и вывод карточек
-  .then(([initialCards, userInfo]) => {
-    initialCards.forEach(function(itemCard) {
-      placesList.append(createCard(itemCard, removeCard, openModalImg, toggleLike));
-    });
-
-    // Получение и вывод информации о пользователе
+Promise.all([getUserInfo(), getInitialCards()])
+  .then(([userInfo, initialCards]) => {
+    // Вывод информации о пользователе
     profileName.textContent = userInfo.name;
     profileDescription.textContent = userInfo.about;
     profileAvatar.src = userInfo.avatar;
+
+    // Вывод карточек
+    initialCards.forEach(function(itemCard) {
+      placesList.append(createCard(itemCard, removeCard, openModalImg, toggleLike));
+    });
   })
   .catch((err) => {
-    console.log(err);
-  })
+    console.error(err);
+  });
+
