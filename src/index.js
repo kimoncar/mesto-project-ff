@@ -2,7 +2,7 @@ import './pages/index.css';
 import { openModal, closeModal, closeModalByClick } from './components/modal.js';
 import { createCard, removeCard, toggleLike } from  './components/card.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getInitialCards, getUserInfo, editUserInfo, addNewCard, addLike, deleteLike } from './components/api.js';
+import { getInitialCards, getUserInfo, editUserInfo, addNewCard, editUserAvatar } from './components/api.js';
 export { cardTemplate };
 
 // DOM: Темплейт карточки
@@ -17,11 +17,13 @@ const profileAvatar = content.querySelector('.profile__image');
 
 // DOM: Кнопки
 const buttonProfileModal = document.querySelector('.profile__edit-button');
-const buttonNewCard = document.querySelector('.profile__add-button');
+const buttonNewCardModal = document.querySelector('.profile__add-button');
+const buttonEditAvatarModal = document.querySelector('.profile__avatar-edit-button');
 
 // DOM: Модальные окна
 const modalProfileEdit = document.querySelector('.popup_type_edit');
 const modalAddCard = document.querySelector('.popup_type_new-card');
+const modalEditAvatar = document.querySelector('.popup_type_edit-avatar');
 const openModals = document.querySelectorAll('.popup');
 
 // DOM: Модальное окно с изображением
@@ -40,6 +42,10 @@ const inputCardName = formAddCard.querySelector('.popup__input_type_card-name');
 const inputCardUrl = formAddCard.querySelector('.popup__input_type_url');
 const buttonAddCard = formAddCard.querySelector('.popup__button');
 
+// DOM: Форма редактирования аватара
+const formEditAvatar = modalEditAvatar.querySelector('.popup__form');
+const inputEditAvatar = formEditAvatar.querySelector('.popup__input_type_avatar');
+
 // Объект с настройками валидации форм
 const validationConfig = {
   formSelector: '.popup__form',
@@ -51,7 +57,7 @@ const validationConfig = {
 };
 
 // Редактирование профиля
-function profileFormSubmit(evt) {
+function editProfileFormSubmit(evt) {
   evt.preventDefault();
   editUserInfo(inputProfileName.value, inputProfileDescription.value)
     .then((res) => {
@@ -82,6 +88,19 @@ function addCardFormSubmit(evt) {
   closeModal(modalAddCard);
 }
 
+// Изменение аватара
+function editAvatarFormSubmit(evt) {
+  evt.preventDefault();
+  editUserAvatar(inputEditAvatar.value)
+    .then((res) => {
+      profileAvatar.src = res.avatar;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  closeModal(modalEditAvatar);
+};
+
 // Функция открытия карточки изображения
 function openModalImg(dataCard) {    
   modalImg.src = dataCard.link;
@@ -99,21 +118,31 @@ buttonProfileModal.addEventListener('click', evt => {
 });
 
 // Открыть окно добавления карточки
-buttonNewCard.addEventListener('click', evt =>  {
+buttonNewCardModal.addEventListener('click', evt =>  {
   clearValidation(formAddCard, validationConfig);
   openModal(modalAddCard);
 });
 
+// Открыть окно редактирования аватара
+buttonEditAvatarModal.addEventListener('click', evt => {
+  clearValidation(formEditAvatar, validationConfig);
+  inputEditAvatar.value = profileAvatar.src;
+  openModal(modalEditAvatar);
+});
+
 // Обработчик закрытия на все модальные окна по overlay и х
-openModals.forEach(modal => {
+Array.from(openModals).forEach(modal => {
   closeModalByClick(modal);
 });
 
 // Редактирование профиля
-formProfileEdit.addEventListener('submit', profileFormSubmit);
+formProfileEdit.addEventListener('submit', editProfileFormSubmit);
 
 // Добавление карточки
 formAddCard.addEventListener('submit', addCardFormSubmit);
+
+// Редактирование аватар
+formEditAvatar.addEventListener('submit', editAvatarFormSubmit);
 
 // Включить валидацию форм
 enableValidation(validationConfig);

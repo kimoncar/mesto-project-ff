@@ -112,3 +112,20 @@ export const deleteLike = (idCard) => {
     return Promise.reject(`Ошибка удаления лайка: ${res.status}`);
   });
 };
+
+// Изменение аватара
+export const editUserAvatar = (url) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: url,
+    })
+  })
+  .then(res => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка изменения аватара: ${res.status}`);
+  });
+};
