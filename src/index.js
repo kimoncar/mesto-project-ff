@@ -35,6 +35,7 @@ const modalImgCaption = modalCard.querySelector('.popup__caption');
 const formProfileEdit = modalProfileEdit.querySelector('.popup__form');
 const inputProfileName = formProfileEdit.querySelector('.popup__input_type_name');
 const inputProfileDescription = formProfileEdit.querySelector('.popup__input_type_description');
+const buttonProfileEdit = formProfileEdit.querySelector('.popup__button');
 
 // DOM: Форма добавления карточки
 const formAddCard = modalAddCard.querySelector('.popup__form');
@@ -45,6 +46,7 @@ const buttonAddCard = formAddCard.querySelector('.popup__button');
 // DOM: Форма редактирования аватара
 const formEditAvatar = modalEditAvatar.querySelector('.popup__form');
 const inputEditAvatar = formEditAvatar.querySelector('.popup__input_type_avatar');
+const buttonEditAvatar = formEditAvatar.querySelector('.popup__button');
 
 // Объект с настройками валидации форм
 const validationConfig = {
@@ -66,6 +68,7 @@ const validMimeTypes = [
 // Редактирование профиля
 function editProfileFormSubmit(evt) {
   evt.preventDefault();
+  buttonProfileEdit.textContent = 'Сохранение...';
   editUserInfo(inputProfileName.value, inputProfileDescription.value)
     .then((res) => {
       profileName.textContent = res.name;
@@ -73,33 +76,41 @@ function editProfileFormSubmit(evt) {
     })
     .catch((err) => {
       console.error(err);
-    });
+    })
+    .finally(() => {
+      buttonProfileEdit.textContent = 'Сохранить';
+    });  
   closeModal(modalProfileEdit);
 };
 
 // Добавление карточки
 function addCardFormSubmit(evt) {
   evt.preventDefault();
+  buttonAddCard.textContent = 'Сохранение...';
   addNewCard(inputCardName.value, inputCardUrl.value)
     .then((itemCard) => {
       const idOwner = itemCard.owner._id;
       const newCard = createCard(itemCard, idOwner, removeCard, openModalImg, toggleLike);
       placesList.prepend(newCard);
+      formAddCard.reset();
+      buttonAddCard.classList.add(validationConfig.inactiveButtonClass);
     })
     .catch((err) => {
       console.error(err);
-    });
-  
-  formAddCard.reset();
-  buttonAddCard.classList.add(validationConfig.inactiveButtonClass);
+    })
+    .finally(() => {
+      buttonAddCard.textContent = 'Создать';
+    });  
   closeModal(modalAddCard);
 }
 
 // Изменение аватара
 function editAvatarFormSubmit(evt) {
   evt.preventDefault();
-    // Проверка mime-типа изображения
-    getMimeTypeFromUrl(inputEditAvatar.value)
+  buttonEditAvatar.textContent = 'Сохранение...';
+
+  // Проверка mime-типа изображения
+  getMimeTypeFromUrl(inputEditAvatar.value)
     .then((res) => {
       const hasMimeType = validMimeTypes.some(type => {
         return type === res.headers.get("content-type");
@@ -116,6 +127,9 @@ function editAvatarFormSubmit(evt) {
     })
     .catch((err) => {
       console.error(err);
+    })
+    .finally(() => {
+      buttonEditAvatar.textContent = 'Сохранить';
     });
   closeModal(modalEditAvatar);
 };
