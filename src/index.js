@@ -2,7 +2,7 @@ import './pages/index.css';
 import { openModal, closeModal, closeModalByClick } from './components/modal.js';
 import { createCard, removeCard, toggleLike } from  './components/card.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getInitialCards, getUserInfo, editUserInfo, addNewCard, editUserAvatar } from './components/api.js';
+import { getInitialCards, getUserInfo, editUserInfo, addNewCard, editUserAvatar, getMimeTypeFromUrl } from './components/api.js';
 export { cardTemplate };
 
 // DOM: Темплейт карточки
@@ -56,6 +56,13 @@ const validationConfig = {
   errorClass: 'popup__error_visible'
 };
 
+// Допустимые mime-типы для аватара профиля
+const validMimeTypes = [
+  'image/jpeg',
+  'image/png',
+  'image/gif'
+];
+
 // Редактирование профиля
 function editProfileFormSubmit(evt) {
   evt.preventDefault();
@@ -91,7 +98,19 @@ function addCardFormSubmit(evt) {
 // Изменение аватара
 function editAvatarFormSubmit(evt) {
   evt.preventDefault();
-  editUserAvatar(inputEditAvatar.value)
+    // Проверка mime-типа изображения
+    getMimeTypeFromUrl(inputEditAvatar.value)
+    .then((res) => {
+      const hasMimeType = validMimeTypes.some(type => {
+        return type === res.headers.get("content-type");
+      });
+      if(hasMimeType) {
+        return res.url;
+      };
+      return Promise.reject(`Недопустимый mime-тип файла: ${res.headers.get("content-type")}. Разрешены: ${validMimeTypes.join(', ')}`);  
+    })
+    // Изменение аватара
+    .then((url) => editUserAvatar(url))
     .then((res) => {
       profileAvatar.src = res.avatar;
     })
@@ -165,3 +184,9 @@ Promise.all([getUserInfo(), getInitialCards()])
     console.error(err);
   });
 
+  /*
+  getMimeTypeFromUrl('https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif')
+  .then(res => {
+    console.log(res)
+  })
+    */

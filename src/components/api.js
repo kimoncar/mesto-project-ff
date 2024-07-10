@@ -14,7 +14,7 @@ export const getUserInfo = () => {
     headers: config.headers
   })
   .then(res => {
-    if (res.ok) {
+    if(res.ok) {
       return res.json();
     }
     return Promise.reject(`Ошибка получения userInfo: ${res.status}`);
@@ -32,7 +32,7 @@ export const editUserInfo = (userName, userAbout) => {
     })
   })
   .then(res => {
-    if (res.ok) {
+    if(res.ok) {
       return res.json();
     }
     return Promise.reject(`Ошибка обновления userInfo: ${res.status}`);
@@ -46,7 +46,7 @@ export const getInitialCards = () => {
     headers: config.headers
   })
   .then(res => {
-    if (res.ok) {
+    if(res.ok) {
       return res.json();
     }
     return Promise.reject(`Ошибка получения карточек: ${res.status}`);
@@ -64,7 +64,7 @@ export const addNewCard = (nameCard, linkCard) => {
     })
   })
   .then(res => {
-    if (res.ok) {
+    if(res.ok) {
       return res.json();
     }
     return Promise.reject(`Ошибка обновления добавления карточки: ${res.status}`);
@@ -123,9 +123,22 @@ export const editUserAvatar = (url) => {
     })
   })
   .then(res => {
-    if (res.ok) {
+    if(res.ok) {
       return res.json();
     }
     return Promise.reject(`Ошибка изменения аватара: ${res.status}`);
+  });
+};
+
+// Получение mime-типа изображения
+export const getMimeTypeFromUrl = (url) => {
+  return fetch(url, {
+    method: 'HEAD'
+  })
+  .then((res) => {
+    if(res.ok) {      
+      return res;
+    }
+    return Promise.reject(`Ошибка получения mime-типа: ${res.status}`);
   });
 };
