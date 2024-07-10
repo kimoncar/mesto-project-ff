@@ -2,7 +2,7 @@ import './pages/index.css';
 import { openModal, closeModal, closeModalByClick } from './components/modal.js';
 import { createCard, removeCard, toggleLike } from  './components/card.js';
 import { enableValidation, clearValidation } from './components/validation.js';
-import { getInitialCards, getUserInfo, editUserInfo, addNewCard } from './components/api.js';
+import { getInitialCards, getUserInfo, editUserInfo, addNewCard, addLike, deleteLike } from './components/api.js';
 export { cardTemplate };
 
 // DOM: Темплейт карточки

@@ -1,26 +1,36 @@
 export { createCard, removeCard, toggleLike };
 import { cardTemplate } from '../index.js';
-import { deleteCard } from './api.js';
+import { deleteCard, addLike, deleteLike } from './api.js';
 
 // Функция создания карточки
 function createCard(itemCard, idOwner, removeCallback, openModalImg, toggleLike) {
-  const placeCard = cardTemplate.querySelector('.places__item').cloneNode(true);
+  const placeCard = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = placeCard.querySelector('.card__image');
   const cardTitle = placeCard.querySelector('.card__title');
   const removeButton = placeCard.querySelector('.card__delete-button');
   const likeButton = placeCard.querySelector('.card__like-button');
   const countLikes = placeCard.querySelector('.card__like-count');
 
+  // Скрыть кнопку удаления, если карточка не принадлежит пользователю
   if(itemCard.owner._id !== idOwner) {
     removeButton.style.display = 'none';
   }
 
-  placeCard.dataset.idCard = itemCard._id;
+  // Показать иконку поставленного лайка карточки
+  itemCard.likes.forEach((like) => {
+    if(like._id === idOwner) {
+      likeButton.classList.add('card__like-button_is-active');
+    };
+  });
+
+  placeCard.id = itemCard._id;
   cardImage.src = itemCard.link;
   cardImage.alt = `Фотография места из региона: ${itemCard.name}`;
   cardTitle.textContent = itemCard.name;
   countLikes.textContent = itemCard.likes.length;
-  likeButton.addEventListener('click', toggleLike);
+  likeButton.addEventListener('click', (evt) => {
+    toggleLike(evt, itemCard._id);
+  });
   removeButton.addEventListener('click', removeCallback);
   cardImage.addEventListener('click', () => {
     openModalImg(itemCard);
@@ -31,17 +41,35 @@ function createCard(itemCard, idOwner, removeCallback, openModalImg, toggleLike)
 
 // Удаление карточки
 function removeCard(evt) {
-  deleteCard(evt.target.closest('.card').dataset.idCard)
+  deleteCard(evt.target.closest('.card').id)
   .then((res) => {
     evt.target.closest('.card').remove();
   })
   .catch((err) => {
     console.error(err);
-  })
-  
+  });
 };
 
-// Лайк
-function toggleLike(evt) {
-  evt.target.classList.toggle('card__like-button_is-active');
-}
+// Постановка/удаление лайка
+function toggleLike(evt, idCard) {
+  const countLikes = evt.target.closest('.card').querySelector('.card__like-count');
+  if(!evt.target.classList.contains('card__like-button_is-active')) {
+    addLike(idCard)
+    .then((res) => {
+      countLikes.textContent = res.likes.length;
+      evt.target.classList.toggle('card__like-button_is-active');
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  } else {
+    deleteLike(idCard)
+    .then((res) => {
+      countLikes.textContent = res.likes.length;
+      evt.target.classList.toggle('card__like-button_is-active');
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  };
+};
