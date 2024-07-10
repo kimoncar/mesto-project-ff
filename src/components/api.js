@@ -84,3 +84,31 @@ export const deleteCard = (idCard) => {
     return Promise.reject(`Ошибка удаления карточки: ${res.status}`);
   });
 };
+
+// Постановка лайка
+export const addLike = (idCard) => {
+  return fetch(`${config.baseUrl}/cards/likes/${idCard}`, {
+    method: 'PUT',
+    headers: config.headers
+  })
+  .then((res) => {
+    if(res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка постановки лайка: ${res.status}`);
+  });
+};
+
+// Удаление лайка
+export const deleteLike = (idCard) => {
+  return fetch(`${config.baseUrl}/cards/likes/${idCard}`, {
+    method: 'DELETE',
+    headers: config.headers
+  })
+  .then((res) => {
+    if(res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка удаления лайка: ${res.status}`);
+  });
+};
