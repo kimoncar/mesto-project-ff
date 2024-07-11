@@ -84,8 +84,8 @@ function editProfileFormSubmit(evt) {
     })
     .finally(() => {
       buttonProfileEdit.textContent = 'Сохранить';
-    });  
-  closeModal(modalProfileEdit);
+      closeModal(modalProfileEdit);
+    });
 };
 
 // Функция добавление карточки
@@ -105,8 +105,8 @@ function addCardFormSubmit(evt) {
     })
     .finally(() => {
       buttonAddCard.textContent = 'Создать';
-    });  
-  closeModal(modalAddCard);
+      closeModal(modalAddCard);
+    });
 }
 
 // Функция изменения аватара с предварительной проверкой mime-типа
@@ -135,8 +135,8 @@ function editAvatarFormSubmit(evt) {
     })
     .finally(() => {
       buttonEditAvatar.textContent = 'Сохранить';
+      closeModal(modalEditAvatar);
     });
-  closeModal(modalEditAvatar);
 };
 
 // Функция открытия окна подтверждения удаления карточки
