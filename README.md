@@ -27,12 +27,14 @@ https://kimoncar.github.io/mesto-project-ff/
 1. Клонировать репозиторий
 
 ```console
-git clone https://github.com/kimoncar/mesto-project-ff.git```
+git clone https://github.com/kimoncar/mesto-project-ff.git
+```
 
 2. Установить зависимости
 
 ```console
-npm install```
+npm install
+```
 
 3. Собрать и запустить проект, используя Webpack
 
