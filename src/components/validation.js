@@ -39,8 +39,10 @@ const hasInvalidInput = (inputList) => {
 const toggleButton = (inputList, buttonElement, validationConfig) => {
 if(hasInvalidInput(inputList)) {
     buttonElement.classList.add(validationConfig.inactiveButtonClass);
+    buttonElement.disabled = true;
   } else {
     buttonElement.classList.remove(validationConfig.inactiveButtonClass);
+    buttonElement.disabled = false;
   };
 };
 
@@ -70,12 +72,15 @@ export const enableValidation = (validationConfig) => {
 
 // Функция очистки ошибок валидации
 export const clearValidation = (formElement, validationConfig) => {
-  let inputList = Array.from(formElement.querySelectorAll(`.${validationConfig.inputErrorClass}`));
+  const inputList = Array.from(formElement.querySelectorAll(`.${validationConfig.inputErrorClass}`));
+  const popupButton = formElement.querySelector('.popup__button');
+
+  // Установка атрибута disabled для кнопки
+  popupButton.disabled = true;
+  popupButton.classList.add(validationConfig.inactiveButtonClass);
+
   inputList.forEach((inputElement) => {
-    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.remove(validationConfig.inputErrorClass);
+    hideError(formElement, inputElement, validationConfig)
     inputElement.value = '';
-    errorElement.classList.remove(validationConfig.errorClass);
-    errorElement.textContent = '';
   });
 };

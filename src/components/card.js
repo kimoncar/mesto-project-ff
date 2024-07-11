@@ -11,10 +11,14 @@ function createCard(itemCard, idOwner, confirmCallback, openModalImg, toggleLike
   const likeButton = placeCard.querySelector('.card__like-button');
   const countLikes = placeCard.querySelector('.card__like-count');
 
-  // Скрыть кнопку удаления, если карточка не принадлежит пользователю
+  // Скрыть кнопку удаления, если карточка не принадлежит пользователю, иначе повесить обработчик
   if(itemCard.owner._id !== idOwner) {
     removeButton.style.display = 'none';
-  }
+  } else {
+    removeButton.addEventListener('click', (evt) => {
+      confirmCallback(evt.target.closest('.card'));
+    });
+  };
 
   // Показать иконку поставленного лайка карточки
   itemCard.likes.forEach((like) => {
@@ -31,12 +35,9 @@ function createCard(itemCard, idOwner, confirmCallback, openModalImg, toggleLike
   likeButton.addEventListener('click', (evt) => {
     toggleLike(evt, itemCard._id);
   });
-  removeButton.addEventListener('click', (evt) => {
-    confirmCallback(evt.target.closest('.card'));
-  });
   cardImage.addEventListener('click', () => {
     openModalImg(itemCard);
-  });  
+  });
   return placeCard;
 };
 
@@ -54,23 +55,11 @@ function removeCard(cardId) {
 // Постановка/удаление лайка
 function toggleLike(evt, idCard) {
   const countLikes = evt.target.closest('.card').querySelector('.card__like-count');
-  if(!evt.target.classList.contains('card__like-button_is-active')) {
-    addLike(idCard)
+  const likeMethod = evt.target.classList.contains('card__like-button_is-active') ? deleteLike : addLike;
+  likeMethod(idCard)
     .then((res) => {
       countLikes.textContent = res.likes.length;
       evt.target.classList.toggle('card__like-button_is-active');
     })
-    .catch((err) => {
-      console.error(err);
-    });
-  } else {
-    deleteLike(idCard)
-    .then((res) => {
-      countLikes.textContent = res.likes.length;
-      evt.target.classList.toggle('card__like-button_is-active');
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-  };
+    .catch(err => console.error(err));
 };

@@ -51,7 +51,6 @@ const buttonEditAvatar = formEditAvatar.querySelector('.popup__button');
 
 // DOM: Форма подтверждения удаления карточки
 const formConfirmRemove = modalConfirmRemove.querySelector('.popup__form');
-const buttonConfirmRemove = formConfirmRemove.querySelector('.popup__button');
 
 // Объект с настройками валидации форм
 const validationConfig = {
@@ -98,7 +97,6 @@ function addCardFormSubmit(evt) {
       const newCard = createCard(itemCard, idOwner, openModalConfirmRemove, openModalImg, toggleLike);
       placesList.prepend(newCard);
       formAddCard.reset();
-      buttonAddCard.classList.add(validationConfig.inactiveButtonClass);
     })
     .catch((err) => {
       console.error(err);
@@ -123,7 +121,7 @@ function editAvatarFormSubmit(evt) {
       if(hasMimeType) {
         return res.url;
       };
-      return Promise.reject(`Недопустимый mime-тип файла: ${res.headers.get("content-type")}. Разрешены: ${validMimeTypes.join(', ')}`);  
+      return Promise.reject(`Недопустимый mime-тип файла: ${res.headers.get("content-type")}. Разрешены: ${validMimeTypes.join(', ')}`);
     })
     // Изменение аватара
     .then((url) => editUserAvatar(url))
