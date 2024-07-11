@@ -70,7 +70,7 @@ const validMimeTypes = [
   'image/gif'
 ];
 
-// Редактирование профиля
+// Функция редактирование профиля
 function editProfileFormSubmit(evt) {
   evt.preventDefault();
   buttonProfileEdit.textContent = 'Сохранение...';
@@ -88,7 +88,7 @@ function editProfileFormSubmit(evt) {
   closeModal(modalProfileEdit);
 };
 
-// Добавление карточки
+// Функция добавление карточки
 function addCardFormSubmit(evt) {
   evt.preventDefault();
   buttonAddCard.textContent = 'Сохранение...';
@@ -109,7 +109,7 @@ function addCardFormSubmit(evt) {
   closeModal(modalAddCard);
 }
 
-// Изменение аватара
+// Функция изменения аватара с предварительной проверкой mime-типа
 function editAvatarFormSubmit(evt) {
   evt.preventDefault();
   buttonEditAvatar.textContent = 'Сохранение...';
@@ -153,7 +153,7 @@ function openModalImg(dataCard) {
   openModal(modalCard);
 };
 
-// Открыть окно редактирования профиля
+// Обработчик открытия окна редактирования профиля
 buttonProfileModal.addEventListener('click', evt => {
   clearValidation(formProfileEdit, validationConfig);
   inputProfileName.value = profileName.textContent;
@@ -161,13 +161,13 @@ buttonProfileModal.addEventListener('click', evt => {
   openModal(modalProfileEdit);
 });
 
-// Открыть окно добавления карточки
+// Обработчик открытия окна добавления карточки
 buttonNewCardModal.addEventListener('click', evt =>  {
   clearValidation(formAddCard, validationConfig);
   openModal(modalAddCard);
 });
 
-// Открыть окно редактирования аватара
+// Обработчик открытия окна редактирования аватара
 buttonEditAvatarModal.addEventListener('click', evt => {
   clearValidation(formEditAvatar, validationConfig);
   inputEditAvatar.value = profileAvatar.src;
@@ -179,25 +179,25 @@ Array.from(openModals).forEach(modal => {
   closeModalByClick(modal);
 });
 
-// Редактирование профиля
+// Обработчик формы редактирование профиля
 formProfileEdit.addEventListener('submit', editProfileFormSubmit);
 
-// Добавление карточки
+// Обработчик формы добавление карточки
 formAddCard.addEventListener('submit', addCardFormSubmit);
 
-// Редактирование аватар
+// Обработчик формы изменения аватара
 formEditAvatar.addEventListener('submit', editAvatarFormSubmit);
 
-// Подтверждение удаления карточки
+// Обработчик формы подтверждение удаления карточки
 formConfirmRemove.addEventListener('submit', (evt) => {
   removeCard(evt.target.dataset.idCard);
   closeModal(modalConfirmRemove);
 });
 
-// Включить валидацию форм
+// Включение валидацию форм
 enableValidation(validationConfig);
 
-// Получение данных с сервера
+// Получение карточек и информации о пользователе с сервера
 Promise.all([getUserInfo(), getInitialCards()])
   .then(([userInfo, initialCards]) => {
     // Вывод информации о пользователе
