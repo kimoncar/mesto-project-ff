@@ -3,7 +3,7 @@ import { cardTemplate } from '../index.js';
 import { deleteCard, addLike, deleteLike } from './api.js';
 
 // Функция создания карточки
-function createCard(itemCard, idOwner, removeCallback, openModalImg, toggleLike) {
+function createCard(itemCard, idOwner, confirmCallback, openModalImg, toggleLike) {
   const placeCard = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = placeCard.querySelector('.card__image');
   const cardTitle = placeCard.querySelector('.card__title');
@@ -31,19 +31,20 @@ function createCard(itemCard, idOwner, removeCallback, openModalImg, toggleLike)
   likeButton.addEventListener('click', (evt) => {
     toggleLike(evt, itemCard._id);
   });
-  removeButton.addEventListener('click', removeCallback);
+  removeButton.addEventListener('click', (evt) => {
+    confirmCallback(evt.target.closest('.card'));
+  });
   cardImage.addEventListener('click', () => {
     openModalImg(itemCard);
-  });
-  
+  });  
   return placeCard;
 };
 
 // Удаление карточки
-function removeCard(evt) {
-  deleteCard(evt.target.closest('.card').id)
+function removeCard(cardItem) {
+  deleteCard(cardItem.id)
   .then((res) => {
-    evt.target.closest('.card').remove();
+    cardItem.remove();
   })
   .catch((err) => {
     console.error(err);

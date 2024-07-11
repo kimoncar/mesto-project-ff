@@ -24,6 +24,7 @@ const buttonEditAvatarModal = document.querySelector('.profile__avatar-edit-butt
 const modalProfileEdit = document.querySelector('.popup_type_edit');
 const modalAddCard = document.querySelector('.popup_type_new-card');
 const modalEditAvatar = document.querySelector('.popup_type_edit-avatar');
+const modalConfirmRemove = document.querySelector('.popup_type_confirm-remove');
 const openModals = document.querySelectorAll('.popup');
 
 // DOM: Модальное окно с изображением
@@ -47,6 +48,10 @@ const buttonAddCard = formAddCard.querySelector('.popup__button');
 const formEditAvatar = modalEditAvatar.querySelector('.popup__form');
 const inputEditAvatar = formEditAvatar.querySelector('.popup__input_type_avatar');
 const buttonEditAvatar = formEditAvatar.querySelector('.popup__button');
+
+// DOM: Форма подтверждения удаления карточки
+const formConfirmRemove = modalConfirmRemove.querySelector('.popup__form');
+const buttonConfirmRemove = formConfirmRemove.querySelector('.popup__button');
 
 // Объект с настройками валидации форм
 const validationConfig = {
@@ -90,7 +95,7 @@ function addCardFormSubmit(evt) {
   addNewCard(inputCardName.value, inputCardUrl.value)
     .then((itemCard) => {
       const idOwner = itemCard.owner._id;
-      const newCard = createCard(itemCard, idOwner, removeCard, openModalImg, toggleLike);
+      const newCard = createCard(itemCard, idOwner, openModalConfirmRemove, openModalImg, toggleLike);
       placesList.prepend(newCard);
       formAddCard.reset();
       buttonAddCard.classList.add(validationConfig.inactiveButtonClass);
@@ -134,8 +139,17 @@ function editAvatarFormSubmit(evt) {
   closeModal(modalEditAvatar);
 };
 
+// Функция открытия окна подтверждения удаления карточки
+function openModalConfirmRemove(cardItem) {
+  openModal(modalConfirmRemove);
+  formConfirmRemove.addEventListener('submit', () => {
+    removeCard(cardItem);
+    closeModal(modalConfirmRemove);
+  });
+};
+
 // Функция открытия карточки изображения
-function openModalImg(dataCard) {    
+function openModalImg(dataCard) {
   modalImg.src = dataCard.link;
   modalImg.alt = `Фотография места из региона: ${dataCard.name}`;
   modalImgCaption.textContent = dataCard.name;
@@ -191,16 +205,9 @@ Promise.all([getUserInfo(), getInitialCards()])
     // Вывод карточек
     const idOwner = userInfo._id;
     initialCards.forEach(function(itemCard) {
-      placesList.append(createCard(itemCard, idOwner, removeCard, openModalImg, toggleLike));
+      placesList.append(createCard(itemCard, idOwner, openModalConfirmRemove, openModalImg, toggleLike));
     });
   })
   .catch((err) => {
     console.error(err);
   });
-
-  /*
-  getMimeTypeFromUrl('https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif')
-  .then(res => {
-    console.log(res)
-  })
-    */
