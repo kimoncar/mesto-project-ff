@@ -141,11 +141,8 @@ function editAvatarFormSubmit(evt) {
 
 // Функция открытия окна подтверждения удаления карточки
 function openModalConfirmRemove(cardItem) {
+  formConfirmRemove.dataset.idCard = cardItem.id;
   openModal(modalConfirmRemove);
-  formConfirmRemove.addEventListener('submit', () => {
-    removeCard(cardItem);
-    closeModal(modalConfirmRemove);
-  });
 };
 
 // Функция открытия карточки изображения
@@ -190,6 +187,12 @@ formAddCard.addEventListener('submit', addCardFormSubmit);
 
 // Редактирование аватар
 formEditAvatar.addEventListener('submit', editAvatarFormSubmit);
+
+// Подтверждение удаления карточки
+formConfirmRemove.addEventListener('submit', (evt) => {
+  removeCard(evt.target.dataset.idCard);
+  closeModal(modalConfirmRemove);
+});
 
 // Включить валидацию форм
 enableValidation(validationConfig);

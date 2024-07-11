@@ -17,7 +17,7 @@ export const getUserInfo = () => {
     if(res.ok) {
       return res.json();
     }
-    return Promise.reject(`Ошибка получения userInfo: ${res.status}`);
+    return Promise.reject(`Ошибка получения информации о пользователе: ${res.status}`);
   });
 };
 

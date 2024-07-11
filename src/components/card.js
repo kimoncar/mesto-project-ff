@@ -41,10 +41,10 @@ function createCard(itemCard, idOwner, confirmCallback, openModalImg, toggleLike
 };
 
 // Удаление карточки
-function removeCard(cardItem) {
-  deleteCard(cardItem.id)
+function removeCard(cardId) {
+  deleteCard(cardId)
   .then((res) => {
-    cardItem.remove();
+    document.getElementById(cardId).remove();
   })
   .catch((err) => {
     console.error(err);
